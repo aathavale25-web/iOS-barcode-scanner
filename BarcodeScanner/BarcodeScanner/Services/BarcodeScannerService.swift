@@ -1,5 +1,6 @@
 import AVFoundation
 import UIKit
+import Combine
 
 struct ScannedBarcode {
     let type: AVMetadataObject.ObjectType
