@@ -11,7 +11,8 @@ final class QualityMetricsTests: XCTestCase {
         )
 
         XCTAssertEqual(metrics.sharpness, 0.9, accuracy: 0.01)
-        XCTAssertEqual(metrics.overallScore, 0.875, accuracy: 0.01)
+        // Calculation: (0.95 * 0.4) + (0.9 * 0.3) + (0.85 * 0.2) + (0.7 * 0.1) = 0.89
+        XCTAssertEqual(metrics.overallScore, 0.89, accuracy: 0.01)
     }
 
     func testQualityRating_Excellent() {
