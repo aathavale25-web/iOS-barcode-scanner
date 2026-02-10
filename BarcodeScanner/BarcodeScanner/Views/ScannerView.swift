@@ -1,8 +1,10 @@
 import SwiftUI
+import AVFoundation
 
 struct ScannerView: View {
     @StateObject private var viewModel = ScannerViewModel()
     @State private var showingHistory = false
+    @State private var cameraPreviewLayer: AVCaptureVideoPreviewLayer?
 
     var body: some View {
         NavigationStack {
@@ -10,8 +12,12 @@ struct ScannerView: View {
                 // Camera preview or mock button
                 if viewModel.mockModeEnabled {
                     mockScannerView
+                } else if let previewLayer = cameraPreviewLayer {
+                    CameraPreview(previewLayer: previewLayer)
+                        .ignoresSafeArea()
                 } else {
-                    Color.black // Placeholder for camera view
+                    Color.black
+                        .ignoresSafeArea()
                 }
 
                 // Scan frame overlay
@@ -47,6 +53,16 @@ struct ScannerView: View {
             }
             .task {
                 await viewModel.checkPermissions()
+
+                if !viewModel.mockModeEnabled && !viewModel.permissionDenied {
+                    cameraPreviewLayer = viewModel.setupCamera()
+                    viewModel.startScanning()
+                }
+            }
+            .onDisappear {
+                if !viewModel.mockModeEnabled {
+                    viewModel.stopScanning()
+                }
             }
             .alert("Camera Access Denied", isPresented: $viewModel.permissionDenied) {
                 Button("Open Settings") {

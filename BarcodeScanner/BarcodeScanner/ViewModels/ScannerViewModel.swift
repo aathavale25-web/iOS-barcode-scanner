@@ -63,4 +63,16 @@ class ScannerViewModel: ObservableObject {
         scannedType = ""
         qualityMetrics = nil
     }
+
+    func setupCamera() -> AVCaptureVideoPreviewLayer? {
+        return scannerService.setupCamera()
+    }
+
+    func startScanning() {
+        scannerService.startScanning()
+    }
+
+    func stopScanning() {
+        scannerService.stopScanning()
+    }
 }
