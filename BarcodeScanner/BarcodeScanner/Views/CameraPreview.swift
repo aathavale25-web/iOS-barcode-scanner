@@ -6,11 +6,19 @@ struct CameraPreview: UIViewRepresentable {
 
     func makeUIView(context: Context) -> UIView {
         let view = UIView(frame: .zero)
+        view.backgroundColor = .black
+
+        // Configure preview layer
+        previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
+
         return view
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
-        previewLayer.frame = uiView.bounds
+        // Update frame on every layout pass
+        DispatchQueue.main.async {
+            previewLayer.frame = uiView.bounds
+        }
     }
 }
