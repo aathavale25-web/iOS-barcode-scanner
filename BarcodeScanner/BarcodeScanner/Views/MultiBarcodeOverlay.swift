@@ -14,6 +14,7 @@ struct MultiBarcodeOverlay: View {
                         BarcodeFrameView(
                             barcode: barcode,
                             bounds: bounds,
+                            previewLayerFrame: previewLayer.frame,
                             geometrySize: geometry.size,
                             onTap: { onBarcodeSelected(barcode) }
                         )
@@ -27,6 +28,7 @@ struct MultiBarcodeOverlay: View {
 struct BarcodeFrameView: View {
     let barcode: ScannedBarcode
     let bounds: CGRect
+    let previewLayerFrame: CGRect
     let geometrySize: CGSize
     let onTap: () -> Void
 
@@ -42,13 +44,31 @@ struct BarcodeFrameView: View {
         }
     }
 
+    // Scale bounds if preview layer and overlay don't match perfectly
+    var adjustedBounds: CGRect {
+        // If sizes match, use bounds as-is
+        guard previewLayerFrame.width > 0 && previewLayerFrame.height > 0 else {
+            return bounds
+        }
+
+        let scaleX = geometrySize.width / previewLayerFrame.width
+        let scaleY = geometrySize.height / previewLayerFrame.height
+
+        return CGRect(
+            x: bounds.origin.x * scaleX,
+            y: bounds.origin.y * scaleY,
+            width: bounds.width * scaleX,
+            height: bounds.height * scaleY
+        )
+    }
+
     var body: some View {
         ZStack(alignment: .top) {
             // Frame around barcode
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.green, lineWidth: 3)
-                .frame(width: bounds.width, height: bounds.height)
-                .position(x: bounds.midX, y: bounds.midY)
+                .frame(width: adjustedBounds.width, height: adjustedBounds.height)
+                .position(x: adjustedBounds.midX, y: adjustedBounds.midY)
 
             // Label above frame
             Text("\(barcodeTypeName) - \(barcode.content)")
@@ -62,8 +82,8 @@ struct BarcodeFrameView: View {
                         .fill(Color.green.opacity(0.9))
                 )
                 .position(
-                    x: bounds.midX,
-                    y: bounds.minY - 20
+                    x: adjustedBounds.midX,
+                    y: max(20, adjustedBounds.minY - 20)
                 )
         }
         .contentShape(Rectangle())
