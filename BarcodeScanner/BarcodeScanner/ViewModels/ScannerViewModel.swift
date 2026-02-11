@@ -9,9 +9,11 @@ class ScannerViewModel: ObservableObject {
     @Published var scannedType: String = ""
     @Published var qualityMetrics: QualityMetrics?
     @Published var permissionDenied = false
+    @Published var detectedBarcodes: [ScannedBarcode] = [] // For multi-scan mode
 
     // Set to false to use real camera, true for mock mode
     @Published var mockModeEnabled = false
+    @Published var multiScanMode: Bool = false
 
     private let scannerService = BarcodeScannerService()
     private let qualityService = QualityAssessmentService()
@@ -23,15 +25,39 @@ class ScannerViewModel: ObservableObject {
     #endif
 
     init() {
-        // Subscribe to barcode scans from the scanner service
+        // Subscribe to single barcode scans
         scannerService.$scannedBarcode
-            .compactMap { $0 } // Filter out nil values
+            .compactMap { $0 }
             .sink { [weak self] scannedBarcode in
                 Task { @MainActor in
                     await self?.processScan(scannedBarcode)
                 }
             }
             .store(in: &cancellables)
+
+        // Subscribe to multi-barcode scans
+        scannerService.$scannedBarcodes
+            .sink { [weak self] barcodes in
+                Task { @MainActor in
+                    self?.detectedBarcodes = barcodes
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    func toggleMultiScanMode() {
+        multiScanMode.toggle()
+        scannerService.multiScanMode = multiScanMode
+
+        if !multiScanMode {
+            // Clear detected barcodes when switching back to single mode
+            detectedBarcodes = []
+        }
+    }
+
+    func selectBarcode(_ barcode: ScannedBarcode) async {
+        // Process the selected barcode in multi-scan mode
+        await processScan(barcode)
     }
 
     private func processScan(_ scannedBarcode: ScannedBarcode) async {

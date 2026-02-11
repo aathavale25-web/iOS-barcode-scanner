@@ -19,6 +19,7 @@ FILES_TO_ADD = {
         'BarcodeScanner/ViewModels/ScannerViewModel.swift',
         'BarcodeScanner/Views/CameraPreview.swift',
         'BarcodeScanner/Views/HistoryView.swift',
+        'BarcodeScanner/Views/MultiBarcodeOverlay.swift',
         'BarcodeScanner/Views/ResultView.swift',
         'BarcodeScanner/Views/ScannerView.swift',
     ],

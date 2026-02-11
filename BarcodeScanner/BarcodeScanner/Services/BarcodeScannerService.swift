@@ -7,11 +7,25 @@ struct ScannedBarcode {
     let content: String
     let image: UIImage?
     let confidence: Double
+    let bounds: CGRect? // Position in the camera preview
+    let id: String // Unique identifier
+
+    init(type: AVMetadataObject.ObjectType, content: String, image: UIImage?, confidence: Double, bounds: CGRect? = nil) {
+        self.type = type
+        self.content = content
+        self.image = image
+        self.confidence = confidence
+        self.bounds = bounds
+        self.id = UUID().uuidString
+    }
 }
 
 class BarcodeScannerService: NSObject, ObservableObject {
     @Published var scannedBarcode: ScannedBarcode?
+    @Published var scannedBarcodes: [ScannedBarcode] = [] // For multi-scan mode
     @Published var error: String?
+
+    var multiScanMode: Bool = false
 
     private var captureSession: AVCaptureSession?
     private var previewLayer: AVCaptureVideoPreviewLayer?
@@ -85,23 +99,51 @@ class BarcodeScannerService: NSObject, ObservableObject {
 
 extension BarcodeScannerService: AVCaptureMetadataOutputObjectsDelegate {
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
-        guard let metadataObject = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
-              let stringValue = metadataObject.stringValue else {
-            return
-        }
 
-        // Capture current frame as image (simplified - in production, capture actual frame)
-        let placeholderImage = UIImage(systemName: "barcode")
+        if multiScanMode {
+            // Multi-scan mode: process all detected barcodes
+            let barcodes = metadataObjects.compactMap { object -> ScannedBarcode? in
+                guard let readableObject = object as? AVMetadataMachineReadableCodeObject,
+                      let stringValue = readableObject.stringValue else {
+                    return nil
+                }
 
-        let barcode = ScannedBarcode(
-            type: metadataObject.type,
-            content: stringValue,
-            image: placeholderImage,
-            confidence: 0.95 // AVFoundation doesn't provide confidence directly
-        )
+                // Convert bounds to preview layer coordinates
+                let bounds = previewLayer?.transformedMetadataObject(for: readableObject)?.bounds
 
-        DispatchQueue.main.async {
-            self.scannedBarcode = barcode
+                let placeholderImage = UIImage(systemName: "barcode")
+
+                return ScannedBarcode(
+                    type: readableObject.type,
+                    content: stringValue,
+                    image: placeholderImage,
+                    confidence: 0.95,
+                    bounds: bounds
+                )
+            }
+
+            DispatchQueue.main.async {
+                self.scannedBarcodes = barcodes
+            }
+        } else {
+            // Single-scan mode: process only first barcode
+            guard let metadataObject = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
+                  let stringValue = metadataObject.stringValue else {
+                return
+            }
+
+            let placeholderImage = UIImage(systemName: "barcode")
+
+            let barcode = ScannedBarcode(
+                type: metadataObject.type,
+                content: stringValue,
+                image: placeholderImage,
+                confidence: 0.95
+            )
+
+            DispatchQueue.main.async {
+                self.scannedBarcode = barcode
+            }
         }
     }
 }

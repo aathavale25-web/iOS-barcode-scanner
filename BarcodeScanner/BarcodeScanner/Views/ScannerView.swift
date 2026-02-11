@@ -37,9 +37,22 @@ struct ScannerView: View {
                     .ignoresSafeArea()
                 }
 
-                // Scan frame overlay (only show when camera is ready)
-                if cameraPreviewLayer != nil {
+                // Scan frame overlay (only show in single-scan mode when camera is ready)
+                if cameraPreviewLayer != nil && !viewModel.multiScanMode {
                     scanFrameOverlay
+                }
+
+                // Multi-barcode overlay (only show in multi-scan mode)
+                if viewModel.multiScanMode, let previewLayer = cameraPreviewLayer {
+                    MultiBarcodeOverlay(
+                        detectedBarcodes: viewModel.detectedBarcodes,
+                        previewLayer: previewLayer,
+                        onBarcodeSelected: { barcode in
+                            Task {
+                                await viewModel.selectBarcode(barcode)
+                            }
+                        }
+                    )
                 }
 
                 // Debug overlay (top of screen)
@@ -57,6 +70,17 @@ struct ScannerView: View {
             .navigationTitle("Barcode Scanner")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        viewModel.toggleMultiScanMode()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: viewModel.multiScanMode ? "viewfinder" : "viewfinder.rectangular")
+                            Text(viewModel.multiScanMode ? "Single" : "Multi")
+                        }
+                    }
+                }
+
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("History") {
                         showingHistory = true
