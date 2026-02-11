@@ -27,45 +27,6 @@
 		BD9DAC162F3BDA1C00F9BAC5 /* BarcodeScanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BarcodeScanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD9DAC252F3BDA1F00F9BAC5 /* BarcodeScannerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarcodeScannerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD9DAC2F2F3BDA1F00F9BAC5 /* BarcodeScannerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BarcodeScannerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D6B07A5F19D0495488046894 /* QualityMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QualityMetrics.swift; sourceTree = "<group>"; };
-		BBD48301C7C44A52830785B6 /* ScanRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanRecord.swift; sourceTree = "<group>"; };
-		6C6BF48249534B78AD2772E4 /* BarcodeScannerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScannerService.swift; sourceTree = "<group>"; };
-		A4FE8EF857B547D5AC7818F8 /* MockScannerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockScannerService.swift; sourceTree = "<group>"; };
-		53A8755C0B714189A9BD57D9 /* QualityAssessmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QualityAssessmentService.swift; sourceTree = "<group>"; };
-		4568336E0A3544159EE90913 /* CameraPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionManager.swift; sourceTree = "<group>"; };
-		D7B47BF89B964BFDB30CCBB6 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
-		5AE45CD3483644EF8090C159 /* ScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerViewModel.swift; sourceTree = "<group>"; };
-		71CA9BB763394B1E9667A774 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
-		8987C4CC952441A99CF085B4 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
-		24B601FEE3834353A5CBF8A1 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
-		3446C385A3BE42AF9D9CE7BB /* ScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerView.swift; sourceTree = "<group>"; };
-		ED2C3547C2F3418C93D05D35 /* QualityMetricsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QualityMetricsTests.swift; sourceTree = "<group>"; };
-		D96B3B6A155148108CB11A2E /* ScanRecordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanRecordTests.swift; sourceTree = "<group>"; };
-		DEAAD9FC8E3D43A0A2F6EF97 /* BarcodeScannerServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScannerServiceTests.swift; sourceTree = "<group>"; };
-		006CE8B1BDC34AC39D2652B8 /* MockScannerServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockScannerServiceTests.swift; sourceTree = "<group>"; };
-		AF9620B2DB0948499D5145FF /* QualityAssessmentServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QualityAssessmentServiceTests.swift; sourceTree = "<group>"; };
-		7475BBEE4FAB423CAA0E78E2 /* CameraPermissionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionManagerTests.swift; sourceTree = "<group>"; };
-		3AD9667AFAA042FDA7491CE5 /* ScanFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanFlowTests.swift; sourceTree = "<group>"; };
-		60E89114469F442FA50B9EC1 /* QualityMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QualityMetrics.swift; sourceTree = "<group>"; };
-		EFBA5F48B78F45FD998D2ABA /* ScanRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanRecord.swift; sourceTree = "<group>"; };
-		1EE9390E8BB9439A80FFD0BC /* BarcodeScannerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScannerService.swift; sourceTree = "<group>"; };
-		6DFE2C872F7244E981AD4794 /* MockScannerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockScannerService.swift; sourceTree = "<group>"; };
-		769F8C45859F4309B2ED4DCD /* QualityAssessmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QualityAssessmentService.swift; sourceTree = "<group>"; };
-		42E06C18960A4B5F945A307B /* CameraPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionManager.swift; sourceTree = "<group>"; };
-		BB5D235285E948B299CE4E93 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
-		181C0583828840C88D8C0AF8 /* ScannerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerViewModel.swift; sourceTree = "<group>"; };
-		8FDD2AEDADA843DBB258FB60 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
-		70853273B7E149C6B5BF47E5 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
-		C0B72ABAEAFE4EB890FC8973 /* MultiBarcodeOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiBarcodeOverlay.swift; sourceTree = "<group>"; };
-		1AF7F9B7CE454B39AD2BA6D2 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
-		90CA6272108E4454B446E085 /* ScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerView.swift; sourceTree = "<group>"; };
-		EA08C2E8121746B2AC74BCD7 /* QualityMetricsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QualityMetricsTests.swift; sourceTree = "<group>"; };
-		0A99138613A84F0DB964F4E4 /* ScanRecordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanRecordTests.swift; sourceTree = "<group>"; };
-		ECFD69CAC05D4477A6D54A42 /* BarcodeScannerServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScannerServiceTests.swift; sourceTree = "<group>"; };
-		5F4FAF7E5C03435092031BCE /* MockScannerServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockScannerServiceTests.swift; sourceTree = "<group>"; };
-		29FE54BC69644E6989C16230 /* QualityAssessmentServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QualityAssessmentServiceTests.swift; sourceTree = "<group>"; };
-		090C2367A29E430380569A38 /* CameraPermissionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionManagerTests.swift; sourceTree = "<group>"; };
-		9F6AE4A02F7C4A3E8F2090AB /* ScanFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanFlowTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -344,7 +305,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTABILITY = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
