@@ -6,6 +6,7 @@ struct ScannerView: View {
     @State private var showingHistory = false
     @State private var cameraPreviewLayer: AVCaptureVideoPreviewLayer?
     @State private var cameraSetupComplete = false
+    @State private var debugMessage = "Initializing..."
 
     var body: some View {
         NavigationStack {
@@ -40,6 +41,18 @@ struct ScannerView: View {
                 if cameraPreviewLayer != nil {
                     scanFrameOverlay
                 }
+
+                // Debug overlay (top of screen)
+                VStack {
+                    Text("DEBUG: \(debugMessage)")
+                        .font(.caption)
+                        .padding(8)
+                        .background(Color.red.opacity(0.8))
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                        .padding(.top, 8)
+                    Spacer()
+                }
             }
             .navigationTitle("Barcode Scanner")
             .navigationBarTitleDisplayMode(.inline)
@@ -70,18 +83,24 @@ struct ScannerView: View {
                 HistoryView()
             }
             .task {
+                debugMessage = "Checking permissions..."
                 await viewModel.checkPermissions()
 
-                if !viewModel.mockModeEnabled && !viewModel.permissionDenied {
+                if viewModel.permissionDenied {
+                    debugMessage = "Camera permission DENIED"
+                } else if viewModel.mockModeEnabled {
+                    debugMessage = "Mock mode is ENABLED"
+                } else {
+                    debugMessage = "Setting up camera..."
                     if let layer = viewModel.setupCamera() {
                         cameraPreviewLayer = layer
+                        debugMessage = "Starting camera..."
                         viewModel.startScanning()
                         cameraSetupComplete = true
+                        debugMessage = "Camera RUNNING"
                     } else {
-                        print("❌ Camera setup failed")
+                        debugMessage = "Camera setup FAILED"
                     }
-                } else {
-                    print("Mock mode: \(viewModel.mockModeEnabled), Permission denied: \(viewModel.permissionDenied)")
                 }
             }
             .onDisappear {
