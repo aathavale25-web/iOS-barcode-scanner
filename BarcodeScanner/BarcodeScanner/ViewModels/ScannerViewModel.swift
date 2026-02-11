@@ -16,10 +16,64 @@ class ScannerViewModel: ObservableObject {
     private let scannerService = BarcodeScannerService()
     private let qualityService = QualityAssessmentService()
     private let permissionManager = CameraPermissionManager()
+    private var cancellables = Set<AnyCancellable>()
 
     #if DEBUG
     private let mockService = MockScannerService()
     #endif
+
+    init() {
+        // Subscribe to barcode scans from the scanner service
+        scannerService.$scannedBarcode
+            .compactMap { $0 } // Filter out nil values
+            .sink { [weak self] scannedBarcode in
+                Task { @MainActor in
+                    await self?.processScan(scannedBarcode)
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    private func processScan(_ scannedBarcode: ScannedBarcode) async {
+        // Stop scanning temporarily to prevent multiple scans
+        scannerService.stopScanning()
+
+        // Get barcode type name
+        scannedType = getBarcodeTypeName(scannedBarcode.type)
+        scannedContent = scannedBarcode.content
+
+        // Analyze quality if we have an image
+        if let image = scannedBarcode.image {
+            qualityMetrics = await qualityService.analyzeImage(image, decodeConfidence: scannedBarcode.confidence)
+        } else {
+            // No image, use decode confidence only
+            qualityMetrics = QualityMetrics(
+                sharpness: 0.7,
+                contrast: 0.7,
+                brightness: 0.7,
+                decodeConfidence: scannedBarcode.confidence
+            )
+        }
+
+        // Provide haptic feedback
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+
+        // Show result
+        isShowingResult = true
+    }
+
+    private func getBarcodeTypeName(_ type: AVMetadataObject.ObjectType) -> String {
+        switch type {
+        case .code128: return "Code 128"
+        case .code93: return "Code 93"
+        case .qr: return "QR Code"
+        case .upce: return "UPC-E"
+        case .ean8: return "EAN-8"
+        case .ean13: return "EAN-13 / UPC-A"
+        default: return "Unknown"
+        }
+    }
 
     func checkPermissions() async {
         let status = permissionManager.checkPermission()
@@ -60,6 +114,11 @@ class ScannerViewModel: ObservableObject {
         scannedContent = ""
         scannedType = ""
         qualityMetrics = nil
+
+        // Restart scanning
+        if !mockModeEnabled {
+            scannerService.startScanning()
+        }
     }
 
     func setupCamera() -> AVCaptureVideoPreviewLayer? {

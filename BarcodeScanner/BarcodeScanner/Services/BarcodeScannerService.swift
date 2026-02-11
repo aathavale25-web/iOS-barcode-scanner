@@ -17,7 +17,14 @@ class BarcodeScannerService: NSObject, ObservableObject {
     private var previewLayer: AVCaptureVideoPreviewLayer?
 
     func supportedBarcodeTypes() -> [AVMetadataObject.ObjectType] {
-        return [.code128, .code93, .qr]
+        return [
+            .code128,
+            .code93,
+            .qr,
+            .upce,      // UPC-E
+            .ean8,      // EAN-8
+            .ean13      // EAN-13 (includes UPC-A)
+        ]
     }
 
     func setupCamera() -> AVCaptureVideoPreviewLayer? {
