@@ -10,11 +10,8 @@ class ScannerViewModel: ObservableObject {
     @Published var qualityMetrics: QualityMetrics?
     @Published var permissionDenied = false
 
-    #if DEBUG
-    @Published var mockModeEnabled = true
-    #else
+    // Set to false to use real camera, true for mock mode
     @Published var mockModeEnabled = false
-    #endif
 
     private let scannerService = BarcodeScannerService()
     private let qualityService = QualityAssessmentService()
