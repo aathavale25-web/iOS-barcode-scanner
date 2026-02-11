@@ -1,9 +1,19 @@
 # Xcode
-*.xcodeproj
 *.xcworkspace
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
+
+# Xcode user-specific files
+xcuserdata/
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.pbxuser
+!default.pbxuser
+*.xccheckout
+*.moved-aside
+DerivedData
 
 # Build
 build/
