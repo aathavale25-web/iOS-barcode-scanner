@@ -5,6 +5,7 @@ struct ScannerView: View {
     @StateObject private var viewModel = ScannerViewModel()
     @State private var showingHistory = false
     @State private var cameraPreviewLayer: AVCaptureVideoPreviewLayer?
+    @State private var cameraSetupComplete = false
 
     var body: some View {
         NavigationStack {
@@ -16,12 +17,29 @@ struct ScannerView: View {
                     CameraPreview(previewLayer: previewLayer)
                         .ignoresSafeArea()
                 } else {
-                    Color.black
-                        .ignoresSafeArea()
+                    // Loading or error state
+                    VStack(spacing: 20) {
+                        if viewModel.permissionDenied {
+                            Image(systemName: "camera.fill.badge.ellipsis")
+                                .font(.system(size: 60))
+                                .foregroundColor(.gray)
+                            Text("Camera Access Needed")
+                                .font(.headline)
+                        } else {
+                            ProgressView("Setting up camera...")
+                                .tint(.white)
+                                .foregroundColor(.white)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.black)
+                    .ignoresSafeArea()
                 }
 
-                // Scan frame overlay
-                scanFrameOverlay
+                // Scan frame overlay (only show when camera is ready)
+                if cameraPreviewLayer != nil {
+                    scanFrameOverlay
+                }
             }
             .navigationTitle("Barcode Scanner")
             .navigationBarTitleDisplayMode(.inline)
@@ -55,8 +73,15 @@ struct ScannerView: View {
                 await viewModel.checkPermissions()
 
                 if !viewModel.mockModeEnabled && !viewModel.permissionDenied {
-                    cameraPreviewLayer = viewModel.setupCamera()
-                    viewModel.startScanning()
+                    if let layer = viewModel.setupCamera() {
+                        cameraPreviewLayer = layer
+                        viewModel.startScanning()
+                        cameraSetupComplete = true
+                    } else {
+                        print("❌ Camera setup failed")
+                    }
+                } else {
+                    print("Mock mode: \(viewModel.mockModeEnabled), Permission denied: \(viewModel.permissionDenied)")
                 }
             }
             .onDisappear {
